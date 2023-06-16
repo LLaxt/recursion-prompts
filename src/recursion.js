@@ -128,14 +128,42 @@ var exponent = function(base, exp) {
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
+  if (n === 1) {
+    return true;
+  }
+  if (n < 1) {
+    return false;
+  }
+  if (n > 1) {
+    return powerOfTwo(n / 2);
+  }
 };
 
 // 9. Write a function that reverses a string.
 var reverse = function(string) {
+  while (string.length > 0 ) {
+    if (string.length === 1) {
+      return '' + string[string.length - 1];
+    } else {
+      return '' + string[string.length - 1] + reverse(string.slice(0, -1));
+    }
+  }
 };
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
+  string = string.toLowerCase();
+  if (string.length === 1) {
+    return true;
+  }
+  if (string.length === 2 && string[0] === string[1]) {
+    return true;
+  }
+  if (string[0] !== string[string.length - 1]) {
+    return false;
+  } else {
+    return palindrome(string.slice(1, -1));
+  }
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
@@ -217,11 +245,32 @@ var countKeysInObj = function(obj, key) {
 // countValuesInObj(obj, 'r') // 2
 // countValuesInObj(obj, 'e') // 1
 var countValuesInObj = function(obj, value) {
+  var valCount = 0;
+  for (var key in obj) {
+    if (typeof obj[key] === 'string') {
+      if (obj[key] === value) {
+        valCount++;
+      }
+    } else {
+      valCount += countValuesInObj(obj[key], value);
+    }
+  }
+  return valCount;
 };
 
 // 24. Find all keys in an object (and nested objects) by a provided name and rename
 // them to a provided new name while preserving the value stored at that key.
 var replaceKeysInObj = function(obj, oldKey, newKey) {
+  for (var key in obj) {
+    if (key === oldKey) {
+      obj[newKey] = obj[oldKey];
+      delete obj[oldKey];
+    }
+    if (typeof obj[key] === 'object') {
+      replaceKeysInObj(obj[key], oldKey, newKey);
+    }
+  }
+  return obj;
 };
 
 // 25. Get the first n Fibonacci numbers. In the Fibonacci sequence, each subsequent
